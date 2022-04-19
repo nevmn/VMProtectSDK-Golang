@@ -1,7 +1,8 @@
 # VMProtectSDK-Golang
 ``UnOfficial VMProtectSDK for Golang``
 
-````Due to the particularity of Golang, VMP is not compatible with it. 
+````
+Due to the particularity of Golang, VMP is not compatible with it. 
 
 For example, there is no 0 at the end of the Golang string, 
 
@@ -42,4 +43,5 @@ Tip:
 
 7."VMProtect.SetSerialNumber" This function has a probability that the program will crash before it is not be protected (only on Windows).
 
-8.You must use VMProtect.GoString to convert char to string,not C.GoString````
+8.You must use VMProtect.GoString to convert char to string,not C.GoString
+````
