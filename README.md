@@ -40,4 +40,6 @@ Tip:
 
 6.Linux has not been tested. Maybe, but some of the code needs to be modified.
 
-7."VMProtect.SetSerialNumber" This function has a probability that the program will crash before it is not be protected (only on Windows).````
+7."VMProtect.SetSerialNumber" This function has a probability that the program will crash before it is not be protected (only on Windows).
+
+8.You must use VMProtect.GoString to convert char to string,not C.GoString````
