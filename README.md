@@ -38,7 +38,7 @@ Guide：
   
   Modify the build script,set the CC
   
-  run the script to build. build-mac-x64.sh
+  run the script to build
 
 ````
 ````
