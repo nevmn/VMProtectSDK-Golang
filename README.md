@@ -29,9 +29,9 @@ Most functions are Bind.
 
 Tip:
 
-1.\x00 or \000 must be added after string ,like VMProtect.BeginUltra("Marker\x00")
+1.\x00 or \000 must be added after string ,like VMProtect.BeginUltra("Marker\x00").
 
-2.Don't use the -gcflags "-N -l" command to compile , Otherwise VMP cannot recognize the Marker
+2.Don't use the -gcflags "-N -l" command to compile , Otherwise VMP cannot recognize the Marker.
 
 3.Must use -ldflags "-s -w" to strip the Symbol，Otherwise VMP cannot recognize the file.
 
@@ -41,7 +41,11 @@ Tip:
 
 6.Linux has not been tested. Maybe, but some of the code needs to be modified.
 
-7."VMProtect.SetSerialNumber" This function has a probability that the program will crash before it is not be protected (only on Windows).
+7."VMProtect.SetSerialNumber" This function has a probability 
+  that the program will crash before it is not be protected (only on Windows).
 
-8.You must use VMProtect.GoString to convert char to string,not C.GoString
+8.You must use VMProtect.GoString to convert char to string,not C.GoString.
+
+9.You can't write the command "#cgo windows LDFLAGS: -L${SRCDIR} -lVMProtectSDK64" in the Go file,
+  Instead, it should be written in the compilation script, Otherwise VMP cannot recognize the Marker.
 ````
