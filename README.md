@@ -48,4 +48,7 @@ Tip:
 
 9.You can't write the command "#cgo windows LDFLAGS: -L${SRCDIR} -lVMProtectSDK64" in the Go file,
   Instead, it should be written in the compilation script, Otherwise VMP cannot recognize the Marker.
+  
+10.If you import other projects from github, please set GO111MODULE=on and modify go.mod,
+   replace VMProtect => /Users/YourName/go/src/VMProtect.
 ````
