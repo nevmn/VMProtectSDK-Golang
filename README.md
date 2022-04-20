@@ -19,14 +19,29 @@ MarkerName and the string need to encrypt all can be detected(work well on mac a
 Because of I didn't have Web License Manager, so the correlation function has not been implemented.
 
 Most functions are Bind.
-
-
+````
+````
 * Test work well on window 11 and Mac OS 12.3.1 (Go 1.18.1)
 
 * But please note that due to the use of some unconventional methods, it may be unsafe.
+````
+````
+Guide：
 
+  Copy "VMProtect" and "example" folder to "/Users/YourName/go/src/"
 
+  Please install the c compiler if not.
+ 
+  Mac: xcode-select --install
+  Mac Cross build PE: sudo port install x86_64-w64-mingw32-gcc
+  Windows: download llvm-mingw
+  
+  Modify the build script,set the CC
+  
+  run the script to build. build-mac-x64.sh
 
+````
+````
 Tip:
 
 1.\x00 or \000 must be added after string ,like VMProtect.BeginUltra("Marker\x00").
