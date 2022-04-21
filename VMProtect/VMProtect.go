@@ -66,7 +66,7 @@ func vmprotectBeginVirtualizationLockByKeyD(string, *string, string) C.void
 
 //go:linkname GetSerialNumberState VMProtectGetSerialNumberState
 //go:noescape
-func GetSerialNumberState() C.int
+func GetSerialNumberState() int
 
 //go:linkname vmprotectDecryptStringA VMProtectDecryptStringA
 //go:noescape
@@ -77,10 +77,10 @@ func vmprotectDecryptStringA(*string) *C.char
 func vmprotectDecryptStringAD(string, *string, string) *C.char
 
 //go:linkname vmprotectSetSerialNumber VMProtectSetSerialNumber
-func vmprotectSetSerialNumber(*string) C.int
+func vmprotectSetSerialNumber(*string) int
 
 //go:linkname vmprotectSetSerialNumberD VMProtectSetSerialNumber
-func vmprotectSetSerialNumberD(string, *string, string) C.int
+func vmprotectSetSerialNumberD(string, *string, string) int
 
 //go:linkname IsProtected VMProtectIsProtected
 //go:noescape
@@ -98,7 +98,7 @@ func GetCurrentHWID() (hwid string) {
 	return hwid
 }
 
-func SetSerialNumber(serial string) C.int {
+func SetSerialNumber(serial string) int {
 	if runtime.GOOS == "windows" {
 		return vmprotectSetSerialNumber(&serial)
 	} else {
