@@ -86,6 +86,10 @@ func vmprotectSetSerialNumberD(string, *string, string) int
 //go:noescape
 func IsProtected() bool
 
+//go:linkname IsValidImageCRC VMProtectIsValidImageCRC
+//go:noescape
+func IsValidImageCRC() bool
+
 func GoString(cchar *C.char) string {
 	return C.GoString(cchar)
 }
@@ -210,10 +214,6 @@ func DecryptStringA(EncryptStr string) (DecryptStr *C.char) {
 	} else {
 		return vmprotectDecryptStringAD("", nil, EncryptStr)
 	}
-}
-
-func IsValidImageCRC() bool {
-	return bool(C.VMProtectIsValidImageCRC())
 }
 
 func IsDebuggerPresent(CheckKernelMode bool) bool {
