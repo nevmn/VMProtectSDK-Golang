@@ -3,6 +3,8 @@ package VMProtect
 /*
 #include <stdbool.h>
 #include "VMProtectSDK.h"
+#cgo windows LDFLAGS: -L. -lVMProtectSDK64
+#cgo darwin LDFLAGS: -L. -lVMProtectSDK
 */
 import "C"
 
