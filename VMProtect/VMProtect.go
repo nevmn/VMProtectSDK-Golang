@@ -90,34 +90,17 @@ func IsProtected() bool
 //go:noescape
 func IsValidImageCRC() bool
 
-//go:linkname vmprotectGetCurrentHWIDD VMProtectGetCurrentHWID
-//go:noescape
-func vmprotectGetCurrentHWIDD(string, *string, *C.char, C.int) C.int
-
-//go:linkname vmprotectGetCurrentHWID VMProtectGetCurrentHWID
-//go:noescape
-func vmprotectGetCurrentHWID(*C.char, *C.char, *C.char, C.int) C.int
-
 func GoString(cchar *C.char) string {
 	return C.GoString(cchar)
 }
 
 func GetCurrentHWID() (hwid string) {
-	if runtime.GOOS == "windows" {
-		nSize := vmprotectGetCurrentHWID(nil, nil, nil, 0)
-		b := make([]byte, nSize)
-		hw := (*C.char)(unsafe.Pointer(&b))
-		vmprotectGetCurrentHWID(nil, nil, (*C.char)(unsafe.Pointer(&hw)), nSize)
-		hwid = C.GoStringN((*C.char)(unsafe.Pointer(&hw)), nSize)
-		return hwid
-	} else {
-		nSize := vmprotectGetCurrentHWIDD("", nil, nil, 0)
-		b := make([]byte, nSize)
-		hw := (*C.char)(unsafe.Pointer(&b))
-		vmprotectGetCurrentHWIDD("", nil, (*C.char)(unsafe.Pointer(&hw)), nSize)
-		hwid = C.GoStringN((*C.char)(unsafe.Pointer(&hw)), nSize)
-		return hwid
-	}
+	nSize := C.VMProtectGetCurrentHWID(nil, 0)
+	b := make([]byte, nSize)
+	hw := (*C.char)(unsafe.Pointer(&b))
+	C.VMProtectGetCurrentHWID(hw, nSize)
+	hwid = C.GoStringN(hw, nSize)
+	return hwid
 }
 
 func SetSerialNumber(serial string) int {
