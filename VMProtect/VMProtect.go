@@ -12,6 +12,17 @@ import (
 	"unsafe"
 )
 
+const (
+	SERIAL_STATE_SUCCESS                = 0
+	SERIAL_STATE_FLAG_CORRUPTED         = 0x00000001
+	SERIAL_STATE_FLAG_INVALID           = 0x00000002
+	SERIAL_STATE_FLAG_BLACKLISTED       = 0x00000004
+	SERIAL_STATE_FLAG_DATE_EXPIRED      = 0x00000008
+	SERIAL_STATE_FLAG_RUNNING_TIME_OVER = 0x00000010
+	SERIAL_STATE_FLAG_BAD_HWID          = 0x00000020
+	SERIAL_STATE_FLAG_MAX_BUILD_EXPIRED = 0x00000040
+)
+
 //go:linkname vmprotectBegin VMProtectBegin
 //go:noescape
 func vmprotectBegin(*string) C.void
