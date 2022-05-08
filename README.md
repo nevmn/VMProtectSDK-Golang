@@ -56,13 +56,10 @@ Tip:
 
 6.Linux has not been tested. Maybe, but some of the code needs to be modified.
 
-7."VMProtect.SetSerialNumber" This function has a probability 
-  that the program will crash before it is not be protected (only on Windows).
+7.You must use VMProtect.GoString to convert func DecryptString's char to string,not C.GoString.
 
-8.You must use VMProtect.GoString to convert char to string,not C.GoString.
-
-9.32-bit systems are not supported..
+8.32-bit systems are not supported..
   
-10.If you import other projects from github, please set GO111MODULE=on and modify go.mod,
+9.If you import other projects from github, please set GO111MODULE=on and modify go.mod,
    replace VMProtect => /Users/YourName/go/src/VMProtect.
 ````
