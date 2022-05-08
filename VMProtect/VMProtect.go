@@ -25,27 +25,27 @@ const (
 
 //go:linkname vmprotectBegin VMProtectBegin
 //go:noescape
-func vmprotectBegin(*string) C.void
+func vmprotectBegin(*string) unsafe.Pointer
 
 //go:linkname vmprotectBeginVirtualization VMProtectBeginVirtualization
 //go:noescape
-func vmprotectBeginVirtualization(*string) C.void
+func vmprotectBeginVirtualization(*string) unsafe.Pointer
 
 //go:linkname vmprotectBeginMutation VMProtectBeginMutation
 //go:noescape
-func vmprotectBeginMutation(*string) C.void
+func vmprotectBeginMutation(*string) unsafe.Pointer
 
 //go:linkname vmprotectBeginUltra VMProtectBeginUltra
 //go:noescape
-func vmprotectBeginUltra(*string) C.void
+func vmprotectBeginUltra(*string) unsafe.Pointer
 
 //go:linkname vmprotectBeginUltraLockByKey VMProtectBeginUltraLockByKey
 //go:noescape
-func vmprotectBeginUltraLockByKey(*string) C.void
+func vmprotectBeginUltraLockByKey(*string) unsafe.Pointer
 
 //go:linkname vmprotectBeginVirtualizationLockByKey VMProtectBeginVirtualizationLockByKey
 //go:noescape
-func vmprotectBeginVirtualizationLockByKey(*string) C.void
+func vmprotectBeginVirtualizationLockByKey(*string) unsafe.Pointer
 
 //go:linkname End VMProtectEnd
 //go:noescape
@@ -53,31 +53,27 @@ func End()
 
 //go:linkname vmprotectBeginD VMProtectBegin
 //go:noescape
-func vmprotectBeginD(string, *string, string) C.void
+func vmprotectBeginD(string, *string, string) unsafe.Pointer
 
 //go:linkname vmprotectBeginVirtualizationD VMProtectBeginVirtualization
 //go:noescape
-func vmprotectBeginVirtualizationD(string, *string, string) C.void
+func vmprotectBeginVirtualizationD(string, *string, string) unsafe.Pointer
 
 //go:linkname vmprotectBeginMutationD VMProtectBeginMutation
 //go:noescape
-func vmprotectBeginMutationD(string, *string, string) C.void
+func vmprotectBeginMutationD(string, *string, string) unsafe.Pointer
 
 //go:linkname vmprotectBeginUltraD VMProtectBeginUltra
 //go:noescape
-func vmprotectBeginUltraD(string, *string, string) C.void
+func vmprotectBeginUltraD(string, *string, string) unsafe.Pointer
 
 //go:linkname vmprotectBeginUltraLockByKeyD VMProtectBeginUltraLockByKey
 //go:noescape
-func vmprotectBeginUltraLockByKeyD(string, *string, string) C.void
+func vmprotectBeginUltraLockByKeyD(string, *string, string) unsafe.Pointer
 
 //go:linkname vmprotectBeginVirtualizationLockByKeyD VMProtectBeginVirtualizationLockByKey
 //go:noescape
-func vmprotectBeginVirtualizationLockByKeyD(string, *string, string) C.void
-
-//go:linkname GetSerialNumberState VMProtectGetSerialNumberState
-//go:noescape
-func GetSerialNumberState() int
+func vmprotectBeginVirtualizationLockByKeyD(string, *string, string) unsafe.Pointer
 
 //go:linkname vmprotectDecryptStringA VMProtectDecryptStringA
 //go:noescape
@@ -87,19 +83,13 @@ func vmprotectDecryptStringA(*string) *C.char
 //go:noescape
 func vmprotectDecryptStringAD(string, *string, string) *C.char
 
-//go:linkname vmprotectSetSerialNumber VMProtectSetSerialNumber
-func vmprotectSetSerialNumber(*string) int
-
-//go:linkname vmprotectSetSerialNumberD VMProtectSetSerialNumber
-func vmprotectSetSerialNumberD(string, *string, string) int
-
-//go:linkname IsProtected VMProtectIsProtected
+//go:linkname call runtime.asmcgocall
 //go:noescape
-func IsProtected() bool
+func call(fn, arg unsafe.Pointer) int32
 
-//go:linkname IsValidImageCRC VMProtectIsValidImageCRC
+//go:linkname callbool runtime.asmcgocall
 //go:noescape
-func IsValidImageCRC() bool
+func callbool(fn, arg unsafe.Pointer) bool
 
 func GoString(cchar *C.char) string {
 	return C.GoString(cchar)
@@ -115,11 +105,13 @@ func GetCurrentHWID() (hwid string) {
 }
 
 func SetSerialNumber(serial string) int {
-	if runtime.GOOS == "windows" {
-		return vmprotectSetSerialNumber(&serial)
-	} else {
-		return vmprotectSetSerialNumberD("", nil, serial)
-	}
+	b := []byte(serial)
+	cserial := (*C.char)(unsafe.Pointer(&b[0]))
+	return int(call(C.VMProtectSetSerialNumber, unsafe.Pointer(cserial)))
+}
+
+func GetSerialNumberState() int {
+	return int(call(C.VMProtectGetSerialNumberState, unsafe.Pointer(nil)))
 }
 
 func GetUser() (user string) {
@@ -172,7 +164,7 @@ func GetMaxBuild() (date string) {
 	return
 }
 
-func Begin(MarkerName string) C.void {
+func Begin(MarkerName string) unsafe.Pointer {
 	if runtime.GOOS == "windows" {
 		return vmprotectBegin(&MarkerName)
 	} else {
@@ -180,7 +172,7 @@ func Begin(MarkerName string) C.void {
 	}
 }
 
-func BeginVirtualization(MarkerName string) C.void {
+func BeginVirtualization(MarkerName string) unsafe.Pointer {
 	if runtime.GOOS == "windows" {
 		return vmprotectBeginVirtualization(&MarkerName)
 	} else {
@@ -188,7 +180,7 @@ func BeginVirtualization(MarkerName string) C.void {
 	}
 }
 
-func BeginMutation(MarkerName string) C.void {
+func BeginMutation(MarkerName string) unsafe.Pointer {
 	if runtime.GOOS == "windows" {
 		return vmprotectBeginMutation(&MarkerName)
 	} else {
@@ -196,7 +188,7 @@ func BeginMutation(MarkerName string) C.void {
 	}
 }
 
-func BeginUltra(MarkerName string) C.void {
+func BeginUltra(MarkerName string) unsafe.Pointer {
 	if runtime.GOOS == "windows" {
 		return vmprotectBeginUltra(&MarkerName)
 	} else {
@@ -204,7 +196,7 @@ func BeginUltra(MarkerName string) C.void {
 	}
 }
 
-func BeginUltraLockByKey(MarkerName string) C.void {
+func BeginUltraLockByKey(MarkerName string) unsafe.Pointer {
 	if runtime.GOOS == "windows" {
 		return vmprotectBeginUltraLockByKey(&MarkerName)
 	} else {
@@ -212,7 +204,7 @@ func BeginUltraLockByKey(MarkerName string) C.void {
 	}
 }
 
-func BeginVirtualizationLockByKey(MarkerName string) C.void {
+func BeginVirtualizationLockByKey(MarkerName string) unsafe.Pointer {
 	if runtime.GOOS == "windows" {
 		return vmprotectBeginVirtualizationLockByKey(&MarkerName)
 	} else {
@@ -229,9 +221,17 @@ func DecryptStringA(EncryptStr string) (DecryptStr *C.char) {
 }
 
 func IsDebuggerPresent(CheckKernelMode bool) bool {
-	return bool(C.VMProtectIsDebuggerPresent(C.bool(CheckKernelMode)))
+	return bool(callbool(C.VMProtectIsDebuggerPresent, unsafe.Pointer(&CheckKernelMode)))
 }
 
 func IsVirtualMachinePresent() bool {
-	return bool(C.VMProtectIsVirtualMachinePresent())
+	return bool(callbool(C.VMProtectIsVirtualMachinePresent, unsafe.Pointer(nil)))
+}
+
+func IsProtected() bool {
+	return bool(callbool(C.VMProtectIsProtected, unsafe.Pointer(nil)))
+}
+
+func IsValidImageCRC() bool {
+	return bool(callbool(C.VMProtectIsValidImageCRC, unsafe.Pointer(nil)))
 }
